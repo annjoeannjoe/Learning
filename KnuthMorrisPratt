@@ -1,0 +1,61 @@
+def KMPSearch(pattern, text):
+
+    # length of pattern
+    M = len(pattern)
+    # length of text
+    N = len(text)
+    # lps[] is created to hold the longest prefix that is also suffix
+    lps = [0] * M
+
+    # preprocess the pattern - calculate lps[] array
+    computeLPSArray(pattern, M, lps)
+
+    # index for text[]
+    i = 0
+    # index for pattern[]
+    j = 0
+
+    while i < N:
+        # if text and pattern match, increment of i and j
+        if text[i] == pattern[j]:
+            i += 1
+            j += 1
+
+        else:
+            # if mismatch
+            if j != 0:
+                j = lps[j - 1]
+            else:
+                i += 1
+
+        if j == M:
+            # if j is equal to M (length of pattern), we print their occurence
+            print("Pattern", pattern, " found at index", str(i - j))
+            j = lps[j - 1]
+
+
+def computeLPSArray(pattern, M, lps):
+    # length of the previous longest prefix suffix
+    len = 0
+    i = 1
+    # lps[0] is always 0 because when considering only the first character, there is no prefix or suffix
+    lps[0] = 0
+
+    while i < M:
+        if pattern[i] == pattern[len]:
+            lps[i] = len + 1
+            len += 1
+            i += 1
+        else:
+            if len != 0:
+                len = lps[len - 1]
+            else:
+                lps[i] = 0
+                i += 1
+
+
+text = "algorisfunalgoisgreat"
+pattern1 = "fun"
+pattern2 = "algo"
+KMPSearch(pattern1, text)
+KMPSearch(pattern2, text)
