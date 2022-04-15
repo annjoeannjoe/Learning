@@ -1,0 +1,58 @@
+public class BestFitAlgorithm {
+    
+ public static void main(String[] args) {
+        
+        int blockSize[] = {100,500,200,300,600};
+        int processSize[] = {120,430,300,560,900};
+        int a = blockSize.length;
+        int b = processSize.length;
+        
+        bestFit(blockSize, a, processSize, b);
+    }
+    
+    static void bestFit(int blockSize[], int a, int processSize[], int b){
+        
+        // Stores block id of the block allocated to a process
+        int allocation[] = new int[b];
+        
+        //Initially there is no block assigned to any process
+        for (int i=0; i<allocation.length; i++){
+            allocation[i] = -1;
+        }
+        
+        //select each process and find the suitable blocks according to their size and assign to it
+        for (int i=0; i<b; i++){
+            
+            //Find the best fit block for the current process
+            int bestFitBlock = -1;
+            for(int j=0; j<a; j++){
+                if(blockSize[j] >= processSize[i]){
+                    if (bestFitBlock == -1){
+                        bestFitBlock =j;
+                    }else if (blockSize[bestFitBlock] > blockSize[j]){
+                        bestFitBlock = j;
+                    }
+                }
+            }
+            
+            //If ablt to find a block for the current process
+            if (bestFitBlock != -1){
+                allocation[i] = bestFitBlock;
+                //Reduce to get the available memory in this block
+                blockSize[bestFitBlock] -= processSize[i];
+            }
+        }
+        
+        System.out.println("\nProcess No. \tProcess Size\tBlock no.");
+        for(int i=0;i<b;i++){
+            System.out.print(" " + (i+1) + "\t\t" + processSize[i] + "\t\t");
+            if(allocation[i] != -1){
+                System.out.print(allocation[i] + 1);
+            }else{
+                System.out.print("Not Allocated");
+            }
+            System.out.println();
+        }
+    }
+    
+}
